@@ -7,6 +7,7 @@
 	import ThemeBtn from "$lib/components/ThemeBtn.svelte";
 	import TextForm from "$lib/components/TextForm.svelte";
 	import ToDo from "$lib/components/ToDo.svelte";
+	import Navigation from "$lib/components/Navigation.svelte";
 
 
 
@@ -25,8 +26,9 @@
 	</picture>
 	
 	<ThemeBtn />
-	<TextForm textVal="" checked={false}/>
+	<TextForm textVal="" checked={false} idCounter={-1}/>
 	<ToDo />
+	<Navigation />
 
 
 </section>

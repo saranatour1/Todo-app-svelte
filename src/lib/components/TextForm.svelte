@@ -1,13 +1,36 @@
 <script lang="ts">
   export let textVal:string ;
   export let checked:boolean;
+  export let idCounter:number;
+  import deleteBtn from '$lib/images/icon-cross.svg'
+
+  let showDeleteBtn = false;
+
+  const changeCheck = () =>{
+    checked =!checked;
+  }
+
 </script>
 
 <div>
-  <form action="post" on:submit|preventDefault={()=>console.log("Something Has happened")}>
-    <input type="checkbox" checked={checked} name="seen" id="myCheckbox">
-    <label for="myCheckbox" class="custom-checkbox"></label>
-    <input type="text" name="todo" id="todo" placeholder="Create a new todo .." value={textVal ? textVal : ""} disabled={textVal ? true :false}>
+  <form action="post" on:submit|preventDefault={()=>console.log("Something Has happened")} >
+    <input type="checkbox" checked={checked} name="myCheckbox" id={`myCheckbox${idCounter}`} on:change={()=>changeCheck()}>
+    <label for={`myCheckbox${idCounter}`} class="custom-checkbox"></label>
+    <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+    <input type="text" name="todo" id="todo" placeholder="Create a new todo .." value={textVal ? textVal : ""} disabled={textVal ? true :false} class={checked ? "crossed":""} on:mouseenter={() => showDeleteBtn = !showDeleteBtn} on:mouseout={() => showDeleteBtn = !showDeleteBtn}>
+    
+    {#if idCounter !==-1}
+      {#if showDeleteBtn}
+        <button class="hovered">
+          <img src={deleteBtn} alt="delte button">
+        </button>
+        {:else}
+        <!-- <div></div> -->
+      {/if}
+
+
+    {/if}
+    
   </form>
 </div>
 
@@ -71,35 +94,49 @@
     background: linear-gradient(to right, hsl(192, 100%, 67%), hsl(280, 87%, 65%)); 
   }
 
-input[type="text"] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border-radius: 50%; */
-  width: 100%;
-  height: auto;
-  outline: none;
-  border: none;
-  background-color: inherit;
-  text-align: left;
-  font-size: var(--font-size-body);
-  font-family: var(--font-family);
-  padding: 10px;
-}
+  input[type="checkbox"]:hover:not(:checked) + .custom-checkbox{
+    border: 1px solid var(--bright-blue);
+  }
 
-input[type="text"]::placeholder {
-  padding: 4px;
-  margin-left: 4px;
-  height: 100%;
-}
+  input[type="text"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border-radius: 50%; */
+    width: 100%;
+    height: auto;
+    outline: none;
+    border: none;
+    background-color: inherit;
+    text-align: left;
+    font-size: var(--font-size-body);
+    font-family: var(--font-family);
+    padding: 10px;
+  }
 
-input[type="text"]::-ms-value{
-  padding: auto;
-  /* height: 100%; */
-}
+  input[type="text"]::placeholder {
+    padding: 4px;
+    margin-left: 4px;
+    height: 100%;
+  }
 
+  input[type="text"]::-ms-value{
+    padding: auto;
+    /* height: 100%; */
+  }
 
+  .crossed{
+    text-decoration: line-through;
+  }
   
+  .hovered{
+    z-index: 999;
+    background-color: transparent;
+    border: none;
+
+    position: absolute;
+    right: 20px; 
+  }
 
 
 

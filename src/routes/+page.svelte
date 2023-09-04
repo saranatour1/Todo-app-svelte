@@ -1,59 +1,51 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import lightBgDesktop from "$lib/images/bg-desktop-light.jpg";
+	import lightBgMobile from "$lib/images/bg-mobile-light.jpg";
+
+	import darkBgDesktop from "$lib/images/bg-desktop-dark.jpg";
+	import darkBgMobile from "$lib/images/bg-mobile-dark.jpg";
+	import ThemeBtn from "$lib/components/ThemeBtn.svelte";
+	import TextForm from "$lib/components/TextForm.svelte";
+	import ToDo from "$lib/components/ToDo.svelte";
+
+
+
 </script>
+
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="To-do App with front-End Mentor Challneges " />
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
+	<picture>
+		<source srcset={lightBgMobile} media="(max-width: 600px)" />
+		<img src={lightBgDesktop} alt="Background imagge in light mode" />
+	</picture>
+	
+	<ThemeBtn />
+	<TextForm textVal="" checked={false}/>
+	<ToDo />
 
-		to your new<br />SvelteKit app
-	</h1>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
 </section>
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
+	section{
+		/* margin: 1rem auto; */
+		height: 30vh;
 	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
+	picture>img{
+		/* position: relative;
 		top: 0;
-		display: block;
+		left: 0; */
+		width: 100vw;
+		z-index: -9999;
+		background-size: cover;
 	}
+
+
+
+
 </style>

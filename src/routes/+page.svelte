@@ -9,6 +9,15 @@
 	import ToDo from "$lib/components/ToDo.svelte";
 	import Navigation from "$lib/components/Navigation.svelte";
 
+	let isDarkMode = false;
+
+	const toggleTheme =(/** @type {{ detail: { isDarkMode: boolean; }; }} */ event) => {
+		// isDarkMode =! isDarkMode;
+
+		isDarkMode = event.detail.isDarkMode;
+
+	}
+
 
 
 </script>
@@ -21,11 +30,11 @@
 
 <section>
 	<picture>
-		<source srcset={lightBgMobile} media="(max-width: 600px)" />
-		<img src={lightBgDesktop} alt="Background imagge in light mode" />
+		<source srcset={isDarkMode ? lightBgMobile :darkBgMobile} media="(max-width: 600px)" />
+		<img src={ isDarkMode ? lightBgDesktop:darkBgDesktop} alt="Background imagge in light mode" />
 	</picture>
 	
-	<ThemeBtn />
+	<ThemeBtn  on:message={toggleTheme} />
 	<TextForm textVal="" checked={false} idCounter={-1}/>
 	<ToDo />
 	<Navigation />
@@ -38,13 +47,15 @@
 		/* margin: 1rem auto; */
 		height: 30vh;
 	}
-	picture>img{
-		/* position: relative;
-		top: 0;
-		left: 0; */
+img{
+	/* position: relative;
+	top: 0;
+	left: 0; */
 		width: 100vw;
-		z-index: -9999;
+		max-height: 40dvh;
+		/* z-index: -9999; */
 		background-size: cover;
+		aspect-ratio: 1 / 1;
 	}
 
 

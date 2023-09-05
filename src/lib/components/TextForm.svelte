@@ -1,39 +1,103 @@
 <script lang="ts">
+  import { myList, unCheckedItems } from '$lib/store';
   export let textVal:string ;
   export let checked:boolean;
-  export let idCounter:number;
-  import deleteBtn from '$lib/images/icon-cross.svg'
+  export let idCounter:string;
+  import deleteBtn from '$lib/images/icon-cross.svg';
+  import type {ToDo} from '../model';
+	import { onMount } from 'svelte';
+
+
+  let todoText = textVal;
 
   let showDeleteBtn = false;
 
   const changeCheck = () =>{
+    const indexToUpdate = $myList.findIndex((obj) => obj.id === idCounter);
     checked =!checked;
+    if(idCounter != "-1"){
+      $myList[indexToUpdate].seen = checked;
+      $myList=$myList;
+    }
+    if(checked){
+      $unCheckedItems -=1;
+    }else{
+      $unCheckedItems +=1;
+    }
+    console.log($myList)
   }
 
+  let fakeArray; 
+  // $: myList.subscribe(item =fakeArray)
+  
+
+  // $:console.log(checked, idCounter , textVal ,todoText);
+
+  const bindText =(event: Event)=>{
+    todoText= (event.target as HTMLInputElement).value;
+  }
+
+  let myObj:ToDo = new Object();
+
+  const addTodo = ()=>{
+
+    if(todoText.length ===0 ){
+      console.log("Please Add a Todo list" , "You may have added an exsiting todo list ");
+    }else{
+      myObj["id"]=Math.random().toString(16).slice(2);
+      myObj["seen"] = checked;
+      myObj["text"] = todoText;
+      myObj["updatedAt"] = new Date();
+      myObj["createdAt"] = new Date();
+      $myList.unshift(myObj);
+      $myList = $myList;
+      clearText()
+    }
+    myObj={};
+    console.log($myList)
+  }
+
+  const clearText = () => {
+    textVal = ""; // Set textVal to an empty string to clear the text
+    todoText="";
+  };
+
+  $:console.log(myObj)
+
+  const deleteItem = () => {
+    $myList =$myList.filter((item) => item.id != idCounter); 
+    // $myList=$myList;
+    console.log($myList)
+  }
+
+//<!--     <!-- value={textVal} --> -->
+
+onMount(()=>{
+  $unCheckedItems = $myList.filter((item) => item.seen === false).length;
+})
 </script>
 
-<div>
-  <form action="post" on:submit|preventDefault={()=>console.log("Something Has happened")} >
+<div >
+  <form action="post" on:submit|preventDefault={()=> addTodo()}>
     <input type="checkbox" checked={checked} name="myCheckbox" id={`myCheckbox${idCounter}`} on:change={()=>changeCheck()}>
     <label for={`myCheckbox${idCounter}`} class="custom-checkbox"></label>
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <input type="text" name="todo" id="todo" placeholder="Create a new todo .." value={textVal ? textVal : ""} disabled={textVal ? true :false} class={checked ? "crossed":""} on:mouseenter={() => showDeleteBtn = !showDeleteBtn} on:mouseout={() => showDeleteBtn = !showDeleteBtn}>
+    <input type="text" name="todo" id="todo" placeholder="Create a new todo .." 
+    on:input={(e)=>  bindText(e)}
+    bind:value={todoText}
+
+    disabled={textVal ? true :false} class={checked ? "crossed":""} >
     
-    {#if idCounter !==-1}
-      {#if showDeleteBtn}
-        <button class="hovered">
-          <img src={deleteBtn} alt="delte button">
+    {#if idCounter != "-1"}
+        <button class="hovered" on:click={()=> deleteItem()}>
+          <img src={deleteBtn} alt="delte button" >
         </button>
-        {:else}
-        <!-- <div></div> -->
-      {/if}
-
-
     {/if}
-    
   </form>
 </div>
 
+
+<!-- Stuff to fix : remove the main div, make this component a form only -->
 <style>
   	div{
 		width: 30rem;
@@ -43,23 +107,27 @@
 
     /* height: 4rem; */
     /* background-color: var(--very-light-gray); */
+    filter: drop-shadow(0rem 0rem 0rem var(--sad-color));
+
+    transition: background ease-in-out 0.3s;
 	}
 
   form{
     height: 100%;
     width: 100%;
-    background-color: var(--very-light-gray);
+    background-color: var(--bg-task);
     border-radius: 7px;
     padding: 3px;
-    filter: drop-shadow(0rem 0rem 0rem var(--very-light-grayish-blue));
+    /* filter: drop-shadow(0rem 0rem 0rem var(--very-light-grayish-blue)); */
     display: flex;
     align-items: center;
     justify-content:flex-start;
-    border-bottom: 1px solid var(--light-grayish-blue);
+    border-bottom: 1px solid var(--border-color);
   }
 
   input[type="checkbox"] {
     display: none;
+
   }
 
   .custom-checkbox {
@@ -68,9 +136,10 @@
     height: 20px;
     display: inline-block;
     border-radius: 50%;
-    border: 1px solid var(--light-grayish-blue);
+    border: 1px solid var(--border-color);
     cursor: pointer;
     position: relative;
+    background-color: inherit;
   }
 
   .custom-checkbox::before {
@@ -95,10 +164,10 @@
   }
 
   input[type="checkbox"]:hover:not(:checked) + .custom-checkbox{
-    border: 1px solid var(--bright-blue);
+    border: 1px solid var(--bright-blue); /** we can keep this*/
   }
 
-  input[type="text"] {
+  input[type="text"]:not(.crossed) {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,7 +181,27 @@
     font-size: var(--font-size-body);
     font-family: var(--font-family);
     padding: 10px;
+    color: var(--color);
   }
+
+  input[type="text"]{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border-radius: 50%; */
+    width: 100%;
+    height: auto;
+    outline: none;
+    border: none;
+    background-color: inherit;
+    text-align: left;
+    font-size: var(--font-size-body);
+    font-family: var(--font-family);
+    padding: 10px;
+
+  }
+
+
 
   input[type="text"]::placeholder {
     padding: 4px;
@@ -127,6 +216,7 @@
 
   .crossed{
     text-decoration: line-through;
+    color: var(--label-color);
   }
   
   .hovered{
@@ -138,6 +228,30 @@
     right: 20px; 
   }
 
+  button{
+    display: none;
+  }
 
+  form:hover button{
+    display: block;
+  }
+
+  @media (max-width: 540px) {
+    div{
+			width: 25rem;
+		}
+	}
+
+  @media (max-width: 450px) {
+		div{
+			width: 22rem;
+		}
+	}
+
+  @media (max-width: 406px) {
+		div{
+			width: 20rem;
+		}
+	}
 
 </style>

@@ -1,16 +1,23 @@
 <script>
 	import TextForm from "./TextForm.svelte";
+  import {myList, all , active, completed} from "../store";
+	import { onMount } from "svelte"; 
 
-let todos = [
-  {id:Math.random().toString(16).slice(2), seen: true, text: "You should do some Workouts", createdAt: new Date(), updatedAt: new Date() },
-];
+  let activeTasks = $myList.filter((item) => item.seen === false);
+  let completedTasks = $myList.filter((item) => item.seen === true);
 
-// console.log()
+  // let fakeBin = [];
+  // onMount(()=>{
+  //   fakeBin = all ? $myList : active ? activeTasks: completedTasks; 
+  // })
+
+  // $:console.log(fakeBin,activeTasks,completedTasks)
+
 </script>
 
 <div>
-  {#each todos as item}
-      <TextForm textVal={item.text} checked={item.seen} idCounter={todos.indexOf(item)}/>
+  {#each [...$myList] as item}
+      <TextForm textVal={item.text} checked={item.seen} idCounter={item.id}/>
   {/each}
 </div>
 
@@ -37,4 +44,23 @@ let todos = [
   div::-webkit-scrollbar{
     opacity: 0;
   }
+
+
+  @media (max-width: 540px) {
+    div{
+			width: 25rem;
+		}
+	}
+
+  @media (max-width: 450px) {
+		div{
+			width: 22rem;
+		}
+	}
+
+  @media (max-width: 406px) {
+		div{
+			width: 20rem;
+		}
+	}
 </style>

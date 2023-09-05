@@ -1,6 +1,35 @@
 <script>
+	import { browser } from '$app/environment';
+	import { onDestroy, onMount } from 'svelte';
 	import Header from './Header.svelte';
 	import './styles.css';
+
+  let innerWidth;
+
+  // Function to update innerWidth value and log it
+  function logInnerWidth() {
+		if(browser){
+			innerWidth = window.innerWidth;
+
+		}
+    console.log(innerWidth);
+  }
+
+  onMount(() => {
+    if (browser) {
+      // Add an event listener for the window resize event
+      window.addEventListener("resize", logInnerWidth);
+    }
+  });
+
+  onDestroy(() => {
+    if (browser) {
+      // Remove the event listener when the component is destroyed
+      window.removeEventListener("resize", logInnerWidth);
+    }
+  });
+
+
 </script>
 
 <div class="app">
@@ -34,13 +63,22 @@ footer {
 	justify-content: flex-end;
 	/* padding-bottom: 17px; */
 	/* margin-bottom: 50rem; */
-	background-color: var(--very-light-gray);
+	background-color: var(--bg-color);
 }
 
 
 footer >p{
 	margin-bottom: 2rem;
+	color: var(--color);
 }
 
+
+/* if anyone ever sees this, I have no idea how this worked lol */
+	@media (max-width: 1025px) {
+		footer{
+			margin-top: -20vh;
+			height: 90vh;
+		}
+	}
 
 </style>

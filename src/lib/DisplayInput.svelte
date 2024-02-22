@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { slide } from 'svelte/transition';
   import { createEventDispatcher } from "svelte";
   import CrossIcon from "./CrossIcon.svelte";
   import type { Todo } from "./store";
@@ -7,11 +8,11 @@
 </script>
 
 
-<label class="relative w-full flex p-4 justify-between items-center">
+<label class="relative w-full flex p-6 justify-between items-center border-b" transition:slide>
   <div class="absolute inset-y-0 left-0 flex items-center pl-4 ">
     <input type="checkbox" class="w-6 h-6 rounded-full border cursor-pointer appearance-none hover:border-bb dark:border-dgb2" checked={item.seen} id={item.id} on:change={()=>dispatch('update', {id:item.id, seen:!item.seen})}/>
     <label for={item.id} class="w-6 h-6 rounded-full border cursor-pointer hover:border-bb transition-colors  dark:border-dgb2"></label>
-    <span class="{item.seen ? 'line-through':''} text-vdgb dark:text-white ps-4">{item.value}</span>
+    <span class="{item.seen ? 'line-through text-lgb':'text-vdgb'}  dark:text-white ps-4">{item.value}</span>
   </div>
   <button class="ml-auto" on:click={()=>dispatch('delete',{id:item.id})}>
     <CrossIcon  />

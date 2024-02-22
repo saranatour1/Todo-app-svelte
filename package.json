@@ -22,6 +22,8 @@
     "vite": "^5.1.0"
   },
   "dependencies": {
-    "@fontsource-variable/josefin-sans": "^5.0.19"
+    "@fontsource-variable/josefin-sans": "^5.0.19",
+    "@types/sortablejs": "^1.15.8",
+    "sortablejs": "^1.15.2"
   }
 }

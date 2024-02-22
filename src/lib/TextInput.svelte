@@ -17,8 +17,6 @@
     }
   }
 
-
-
 </script>
 
 <form class="relative mt-10 w-full" on:submit|preventDefault>

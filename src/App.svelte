@@ -26,6 +26,8 @@
   <Header />
   <TextInput on:make-todo-item={updateCounts} />
   <Display allItems={allItems}  on:update={updateCounts}/>
+
+  <span class="text-lgb dark:text-white">Drag and drop to reorder list</span>
 </main>
 
 <style>

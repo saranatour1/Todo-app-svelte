@@ -28,6 +28,12 @@ export default {
       },
       fontFamily:{
         'joseph-sans':['Josefin Sans Variable', 'sans-serif'],
+      },
+      backgroundImage:{
+        'lg-light':"url('/src/assets/bg-desktop-light.jpg')",
+        'sm-light':"url('/src/assets/bg-mobile-light.jpg')",
+        'lg-dark':"url('/src/assets/bg-desktop-dark.jpg')",
+        'sm-dark':"url('/src/assets/bg-mobile-dark.jpg')",
       }
     },
   },
